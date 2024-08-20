@@ -5,6 +5,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const connectMongoose = require("./ConnectDB/connectDB");
+const Product = require("./FurnitureModelSchema/FurnitureModelSchema");
 require("dotenv").config();
 // middleware
 app.use(cookieParser());
@@ -23,6 +24,19 @@ const cookieOptions = {
   secure: process.env.NODE_ENV === "production",
   sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
 };
+
+app.get("/product", async (req, res) => {
+  try {
+    const result = await Product.find();
+    res.send(result);
+  } catch (error) {
+    res.send({
+      status: 500,
+      message: "There war server error",
+      success: false,
+    });
+  }
+});
 
 app.post("/jwt", async (req, res) => {
   try {
