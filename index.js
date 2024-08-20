@@ -4,6 +4,7 @@ const port = process.env.PORT || 3000;
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
+const connectMongoose = require("./ConnectDB/connectDB");
 require("dotenv").config();
 // middleware
 app.use(cookieParser());
@@ -14,6 +15,8 @@ app.use(
   })
 );
 app.use(express.json());
+
+connectMongoose();
 
 const cookieOptions = {
   httpOnly: true,
