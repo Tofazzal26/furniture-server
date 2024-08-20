@@ -27,8 +27,25 @@ const cookieOptions = {
 
 app.get("/product", async (req, res) => {
   try {
-    const result = await Product.find();
+    const page = parseInt(req.query.page);
+    const size = parseInt(req.query.size);
+    const result = await Product.find()
+      .skip(page * size)
+      .limit(size);
     res.send(result);
+  } catch (error) {
+    res.send({
+      status: 500,
+      message: "There war server error",
+      success: false,
+    });
+  }
+});
+
+app.get("/productCount", async (req, res) => {
+  try {
+    const count = await Product.estimatedDocumentCount();
+    res.send({ count });
   } catch (error) {
     res.send({
       status: 500,
