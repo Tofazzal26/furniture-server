@@ -29,12 +29,14 @@ app.get("/product", async (req, res) => {
   try {
     const page = parseInt(req.query.page);
     const size = parseInt(req.query.size);
+    const search = req.query.search;
     const priceRange = parseInt(req.query.price);
-    console.log(priceRange);
-
     const query = {};
     if (priceRange > 0) {
       query.price = { $lte: priceRange };
+    }
+    if (search) {
+      query.title = { $regex: search, $options: "i" };
     }
     const result = await Product.find(query)
       .skip(page * size)
