@@ -29,7 +29,14 @@ app.get("/product", async (req, res) => {
   try {
     const page = parseInt(req.query.page);
     const size = parseInt(req.query.size);
-    const result = await Product.find()
+    const priceRange = parseInt(req.query.price);
+    console.log(priceRange);
+
+    const query = {};
+    if (priceRange > 0) {
+      query.price = { $lte: priceRange };
+    }
+    const result = await Product.find(query)
       .skip(page * size)
       .limit(size);
     res.send(result);
