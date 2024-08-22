@@ -73,6 +73,21 @@ app.post("/addFurniture", async (req, res) => {
   }
 });
 
+app.get("/userProduct/:email", async (req, res) => {
+  const email = req.params.email;
+  const query = { email: email };
+  try {
+    const result = await Product.find(query);
+    res.send(result);
+  } catch (error) {
+    res.send({
+      status: 500,
+      message: "There was server error",
+      success: false,
+    });
+  }
+});
+
 app.get("/productCount", async (req, res) => {
   try {
     const count = await Product.estimatedDocumentCount();
