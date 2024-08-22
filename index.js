@@ -5,7 +5,10 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const connectMongoose = require("./ConnectDB/connectDB");
-const Product = require("./FurnitureModelSchema/FurnitureModelSchema");
+const {
+  Product,
+  Furniture,
+} = require("./FurnitureModelSchema/FurnitureModelSchema");
 require("dotenv").config();
 // middleware
 app.use(cookieParser());
@@ -51,6 +54,25 @@ app.get("/product", async (req, res) => {
   }
 });
 
+app.post("/addFurniture", async (req, res) => {
+  const product = req.body;
+  try {
+    const result = await Product.create(product);
+    res.send({
+      status: 200,
+      message: "Data inserted success",
+      success: true,
+      data: result,
+    });
+  } catch (error) {
+    res.send({
+      status: 500,
+      message: "There was server error",
+      success: false,
+    });
+  }
+});
+
 app.get("/productCount", async (req, res) => {
   try {
     const count = await Product.estimatedDocumentCount();
@@ -58,7 +80,7 @@ app.get("/productCount", async (req, res) => {
   } catch (error) {
     res.send({
       status: 500,
-      message: "There war server error",
+      message: "There was server error",
       success: false,
     });
   }
