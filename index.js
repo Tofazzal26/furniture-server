@@ -88,6 +88,26 @@ app.get("/userProduct/:email", async (req, res) => {
   }
 });
 
+app.delete("/productDelete/:id", async (req, res) => {
+  const id = req.params.id;
+  const query = { _id: id };
+  try {
+    const result = await Product.findByIdAndDelete(query);
+    res.send({
+      success: true,
+      status: 200,
+      message: "Delete Success",
+      data: result,
+    });
+  } catch (error) {
+    res.send({
+      status: 500,
+      message: "There was server error",
+      success: false,
+    });
+  }
+});
+
 app.get("/productCount", async (req, res) => {
   try {
     const count = await Product.estimatedDocumentCount();
